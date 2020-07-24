@@ -14,6 +14,7 @@ class World: SKScene, SKPhysicsContactDelegate {
     private var floor: SKSpriteNode?
     private var leftWall: SKSpriteNode?
     private var rightWall: SKSpriteNode?
+    private var background: SKSpriteNode?
     private var car: SKSpriteNode?
     private let velocity: CGFloat = 10
     private var droppers = [SKSpriteNode]()
@@ -21,12 +22,6 @@ class World: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
-        
-//        let background = SKSpriteNode(imageNamed: "background.jpg")
-//        background.position = CGPoint(x: 512, y: 384)
-//        background.blendMode = .replace
-//        background.zPosition = -1
-//        addChild(background)
         
         floor = childNode(withName: "//floor") as? SKSpriteNode
         if let floor = floor {
@@ -49,6 +44,9 @@ class World: SKScene, SKPhysicsContactDelegate {
             rightWall.physicsBody?.isDynamic = false
             rightWall.physicsBody!.contactTestBitMask = rightWall.physicsBody!.collisionBitMask
         }
+        background = childNode(withName: "//background") as? SKSpriteNode
+        let locations = ["amsterdam", "athens", "berlin", "london", "newYork", "paris", "rome", "washington"]
+        background?.texture = SKTexture(imageNamed: locations.randomElement()!)
         
         let dropperGroup = childNode(withName: "//droppers")
         droppers = dropperGroup?.children as? [SKSpriteNode] ?? []
@@ -61,6 +59,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 y: floor.position.y + ((floor.size.height + width) / 2)
             )
             car.name = "car"
+            car.zPosition = 10
             car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
             car.physicsBody?.affectedByGravity = true
             car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
@@ -114,6 +113,7 @@ class World: SKScene, SKPhysicsContactDelegate {
         ball.physicsBody?.restitution = 0.4
         ball.position = dropper.convert(dropper.position, to: self)
         ball.name = "note"
+        ball.zPosition = 5
         dropper.addChild(ball)
     }
     
