@@ -14,13 +14,17 @@ class World: SKScene, SKPhysicsContactDelegate {
     var isLeftKeyDown = false
     var isRightKeyDown = false
     
-    private var car: SKSpriteNode?
+    private var yellowMini: SKSpriteNode?
     private var background: SKSpriteNode?
     private var droppers = [SKSpriteNode]()
     private var environment = [SKSpriteNode?]()
     
+    var yellowScore = 0
+    var greenScore = 0
+    
     override func didMove(to view: SKView) {
         
+        scaleMode = .aspectFit
         physicsWorld.contactDelegate = self
         
         environment = [
@@ -47,19 +51,12 @@ class World: SKScene, SKPhysicsContactDelegate {
         let dropperGroup = childNode(withName: "//droppers")
         droppers = dropperGroup?.children as? [SKSpriteNode] ?? []
         
-        let width = (size.width + size.height) * 0.05
-        car = SKSpriteNode(texture: SKTexture(imageNamed: "yellowMini"), color: .black, size: CGSize(width: width * 2.4, height: width))
-        if let car = car, let floor = environment[0] {
-            car.position = CGPoint(
-                x: floor.anchorPoint.x,
-                y: floor.position.y + ((floor.size.height + width) / 2)
-            )
-            car.name = "car"
+        yellowMini = childNode(withName: "//yellowMini") as? SKSpriteNode
+        if let car = yellowMini {
             car.zPosition = 10
             car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
-            car.physicsBody?.affectedByGravity = true
+            car.physicsBody!.affectedByGravity = true
             car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
-            addChild(car)
         }
         
     }
@@ -90,18 +87,50 @@ class World: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         switch (contact.bodyA.node?.name, contact.bodyB.node?.name) {
-        case ("car", "leftWall"), ("leftWall", "car"):
-            print("car and wall collided")
-        case ("car", "rightWall"), ("rightWall", "car"):
-            print("car and wall collided")
-        case ("floor", "note"):
+//        case ("yellowMini", "leftWall"), ("leftWall", "yellowMini"):
+//            print("car and wall collided")
+//        case ("yellowMini", "rightWall"), ("rightWall", "yellowMini"):
+//            print("yellowMini and wall collided")
+        case ("floor", "miNote"), ("floor", "niNote"):
             contact.bodyB.node?.removeFromParent()
-        case ("note", "floor"):
+        case ("miNote", "floor"), ("niNote", "floor"):
             contact.bodyA.node?.removeFromParent()
-        case ("car", "note"):
+
+        /// Yellow catches miNote: +1
+        case ("miNote", "yellowMini"):
+            contact.bodyA.node?.removeFromParent()
+            fallthrough
+        case ("yellowMini", "miNote"):
             contact.bodyB.node?.removeFromParent()
-        case ("note", "car"):
+            yellowScore += 1
+            print("Yellow score: \(yellowScore)")
+
+        /// Yellow catches niNote: -1
+        case ("niNote", "yellowMini"):
             contact.bodyA.node?.removeFromParent()
+            fallthrough
+        case ("yellowMini", "niNote"):
+            contact.bodyB.node?.removeFromParent()
+            if yellowScore > 0 { yellowScore -= 1 }
+            print("Yellow score: \(yellowScore)")
+
+        /// Green catches niNote: +1
+        case ("niNote", "greenMini"):
+            contact.bodyA.node?.removeFromParent()
+            fallthrough
+        case ("greenMini", "niNote"):
+            contact.bodyB.node?.removeFromParent()
+            greenScore += 1
+            print("Green score: \(greenScore)")
+
+        /// Green catches miNote: -1
+        case ("miNote", "greenMini"):
+            contact.bodyA.node?.removeFromParent()
+            fallthrough
+        case ("greenMini", "miNote"):
+            contact.bodyB.node?.removeFromParent()
+            if greenScore > 0 { greenScore -= 1 }
+            print("Green score: \(greenScore)")
         default: break
         }
     }
@@ -111,13 +140,13 @@ class World: SKScene, SKPhysicsContactDelegate {
         if !(isLeftKeyDown && isRightKeyDown) {
             let rate: CGFloat = 0.05
             let relativeVelocity = CGVector(
-                dx: 200 - (car!.physicsBody?.velocity.dx)!,
-                dy: 200 - (car!.physicsBody?.velocity.dy)!
+                dx: 200 - (yellowMini!.physicsBody?.velocity.dx)!,
+                dy: 200 - (yellowMini!.physicsBody?.velocity.dy)!
             )
             if isLeftKeyDown || isRightKeyDown {
-                car!.physicsBody!.velocity = CGVector(
-                    dx: car!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isLeftKeyDown ? -1 : 1),
-                    dy: car!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
+                yellowMini!.physicsBody!.velocity = CGVector(
+                    dx: yellowMini!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isLeftKeyDown ? -1 : 1),
+                    dy: yellowMini!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
                 )
             }
         }
@@ -127,11 +156,15 @@ class World: SKScene, SKPhysicsContactDelegate {
         guard spawnChance < 0.025 else { return }
         let dropper = droppers.randomElement()!
         guard dropper.children == [] else { return }
-        let note = SKSpriteNode(texture: nil, color: .red, size: CGSize(width: 200, height: 200))
+        let noteType = ["mi", "ni"].randomElement()!
+        let note = SKSpriteNode(
+            texture: SKTexture(imageNamed: noteType),
+            color: .red,
+            size: CGSize(width: 100, height: 100)
+        )
         note.physicsBody = SKPhysicsBody(rectangleOf: note.size)
-        note.physicsBody?.restitution = 0.4
         note.position = dropper.convert(dropper.position, to: self)
-        note.name = "note"
+        note.name = "\(noteType)Note"
         note.zPosition = 5
         dropper.addChild(note)
     }
