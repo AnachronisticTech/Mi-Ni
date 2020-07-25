@@ -11,9 +11,12 @@ import GameplayKit
 
 class World: SKScene, SKPhysicsContactDelegate {
     
+    var isAKeyDown = false
+    var isDKeyDown = false
     var isLeftKeyDown = false
     var isRightKeyDown = false
     
+    private var greenMini: SKSpriteNode?
     private var yellowMini: SKSpriteNode?
     private var background: SKSpriteNode?
     private var droppers = [SKSpriteNode]()
@@ -59,96 +62,109 @@ class World: SKScene, SKPhysicsContactDelegate {
             car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
         }
         
+        greenMini = childNode(withName: "//greenMini") as? SKSpriteNode
+        if let car = greenMini {
+            car.zPosition = 10
+            car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
+            car.physicsBody!.affectedByGravity = true
+            car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
+        }
+        // cars should ignore each other's collisions
     }
     
     override func keyDown(with event: NSEvent) {
-        // a is 0, d is 2
         switch event.keyCode {
-        case 123: // Left arrow
-            isLeftKeyDown = true
-        case 124: // Right arrow
-            isRightKeyDown = true
-        default: break
+            case 0: isAKeyDown = true
+            case 2: isDKeyDown = true
+            case 123: isLeftKeyDown = true
+            case 124: isRightKeyDown = true
+            default: break
         }
     }
     
     override func keyUp(with event: NSEvent) {
-        // a is 0, d is 2
         switch event.keyCode {
-        case 123: // Left arrow
-            isLeftKeyDown = false
-        case 124: // Right arrow
-            isRightKeyDown = false
-        case 53: // Escape
-            exit(0)
-        default: break
+            case 0: isAKeyDown = false
+            case 2: isDKeyDown = false
+            case 123: isLeftKeyDown = false
+            case 124: isRightKeyDown = false
+            case 53: exit(0)
+            default: break
         }
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         switch (contact.bodyA.node?.name, contact.bodyB.node?.name) {
-//        case ("yellowMini", "leftWall"), ("leftWall", "yellowMini"):
-//            print("car and wall collided")
-//        case ("yellowMini", "rightWall"), ("rightWall", "yellowMini"):
-//            print("yellowMini and wall collided")
-        case ("floor", "miNote"), ("floor", "niNote"):
-            contact.bodyB.node?.removeFromParent()
-        case ("miNote", "floor"), ("niNote", "floor"):
-            contact.bodyA.node?.removeFromParent()
+    //        case ("yellowMini", "leftWall"), ("leftWall", "yellowMini"):
+    //            print("car and wall collided")
+    //        case ("yellowMini", "rightWall"), ("rightWall", "yellowMini"):
+    //            print("yellowMini and wall collided")
+            case ("floor", "miNote"), ("floor", "niNote"):
+                contact.bodyB.node?.removeFromParent()
+            case ("miNote", "floor"), ("niNote", "floor"):
+                contact.bodyA.node?.removeFromParent()
 
-        /// Yellow catches miNote: +1
-        case ("miNote", "yellowMini"):
-            contact.bodyA.node?.removeFromParent()
-            fallthrough
-        case ("yellowMini", "miNote"):
-            contact.bodyB.node?.removeFromParent()
-            yellowScore += 1
-            print("Yellow score: \(yellowScore)")
+            /// Yellow catches miNote: +1
+            case ("miNote", "yellowMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("yellowMini", "miNote"):
+                contact.bodyB.node?.removeFromParent()
+                yellowScore += 1
+                print("Yellow score: \(yellowScore)")
 
-        /// Yellow catches niNote: -1
-        case ("niNote", "yellowMini"):
-            contact.bodyA.node?.removeFromParent()
-            fallthrough
-        case ("yellowMini", "niNote"):
-            contact.bodyB.node?.removeFromParent()
-            if yellowScore > 0 { yellowScore -= 1 }
-            print("Yellow score: \(yellowScore)")
+            /// Yellow catches niNote: -1
+            case ("niNote", "yellowMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("yellowMini", "niNote"):
+                contact.bodyB.node?.removeFromParent()
+                if yellowScore > 0 { yellowScore -= 1 }
+                print("Yellow score: \(yellowScore)")
 
-        /// Green catches niNote: +1
-        case ("niNote", "greenMini"):
-            contact.bodyA.node?.removeFromParent()
-            fallthrough
-        case ("greenMini", "niNote"):
-            contact.bodyB.node?.removeFromParent()
-            greenScore += 1
-            print("Green score: \(greenScore)")
+            /// Green catches niNote: +1
+            case ("niNote", "greenMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("greenMini", "niNote"):
+                contact.bodyB.node?.removeFromParent()
+                greenScore += 1
+                print("Green score: \(greenScore)")
 
-        /// Green catches miNote: -1
-        case ("miNote", "greenMini"):
-            contact.bodyA.node?.removeFromParent()
-            fallthrough
-        case ("greenMini", "miNote"):
-            contact.bodyB.node?.removeFromParent()
-            if greenScore > 0 { greenScore -= 1 }
-            print("Green score: \(greenScore)")
-        default: break
+            /// Green catches miNote: -1
+            case ("miNote", "greenMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("greenMini", "miNote"):
+                contact.bodyB.node?.removeFromParent()
+                if greenScore > 0 { greenScore -= 1 }
+                print("Green score: \(greenScore)")
+            default: break
         }
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Driving
-        if !(isLeftKeyDown && isRightKeyDown) {
-            let rate: CGFloat = 0.05
+        let rate: CGFloat = 0.05 // BUG: Moving left faster than moving right
+        if !(isLeftKeyDown && isRightKeyDown) && (isLeftKeyDown || isRightKeyDown) {
             let relativeVelocity = CGVector(
-                dx: 200 - (yellowMini!.physicsBody?.velocity.dx)!,
-                dy: 200 - (yellowMini!.physicsBody?.velocity.dy)!
+                dx: 200 - yellowMini!.physicsBody!.velocity.dx,
+                dy: 200 - yellowMini!.physicsBody!.velocity.dy
             )
-            if isLeftKeyDown || isRightKeyDown {
-                yellowMini!.physicsBody!.velocity = CGVector(
-                    dx: yellowMini!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isLeftKeyDown ? -1 : 1),
-                    dy: yellowMini!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
-                )
-            }
+            yellowMini!.physicsBody!.velocity = CGVector(
+                dx: yellowMini!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isLeftKeyDown ? -1 : 1),
+                dy: yellowMini!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
+            )
+        }
+        if !(isAKeyDown && isDKeyDown) && (isAKeyDown || isDKeyDown) {
+            let relativeVelocity = CGVector(
+                dx: 200 - greenMini!.physicsBody!.velocity.dx,
+                dy: 200 - greenMini!.physicsBody!.velocity.dy
+            )
+            greenMini!.physicsBody!.velocity = CGVector(
+                dx: greenMini!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isAKeyDown ? -1 : 1),
+                dy: greenMini!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
+            )
         }
         
         // Note spawning
