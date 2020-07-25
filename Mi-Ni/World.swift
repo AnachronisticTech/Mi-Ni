@@ -11,41 +11,37 @@ import GameplayKit
 
 class World: SKScene, SKPhysicsContactDelegate {
     
-    private var floor: SKSpriteNode?
-    private var leftWall: SKSpriteNode?
-    private var rightWall: SKSpriteNode?
-    private var background: SKSpriteNode?
+    var isLeftKeyDown = false
+    var isRightKeyDown = false
+    
     private var car: SKSpriteNode?
-    private let velocity: CGFloat = 10
+    private var background: SKSpriteNode?
     private var droppers = [SKSpriteNode]()
+    private var environment = [SKSpriteNode?]()
     
     override func didMove(to view: SKView) {
         
         physicsWorld.contactDelegate = self
         
-        floor = childNode(withName: "//floor") as? SKSpriteNode
-        if let floor = floor {
-            floor.physicsBody = SKPhysicsBody(rectangleOf: floor.size)
-            floor.physicsBody?.affectedByGravity = false
-            floor.physicsBody?.isDynamic = false
-            floor.physicsBody!.contactTestBitMask = floor.physicsBody!.collisionBitMask
+        environment = [
+            childNode(withName: "//floor") as? SKSpriteNode,
+            childNode(withName: "//leftWall") as? SKSpriteNode,
+            childNode(withName: "//rightWall") as? SKSpriteNode
+        ]
+        for element in environment {
+            if let element = element {
+                element.physicsBody = SKPhysicsBody(rectangleOf: element.size)
+                element.physicsBody!.affectedByGravity = false
+                element.physicsBody!.isDynamic = false
+                element.physicsBody!.contactTestBitMask = element.physicsBody!.collisionBitMask
+            }
         }
-        leftWall = childNode(withName: "//leftWall") as? SKSpriteNode
-        if let leftWall = leftWall {
-            leftWall.physicsBody = SKPhysicsBody(rectangleOf: leftWall.size)
-            leftWall.physicsBody?.affectedByGravity = false
-            leftWall.physicsBody?.isDynamic = false
-            leftWall.physicsBody!.contactTestBitMask = leftWall.physicsBody!.collisionBitMask
-        }
-        rightWall = childNode(withName: "//rightWall") as? SKSpriteNode
-        if let rightWall = rightWall {
-            rightWall.physicsBody = SKPhysicsBody(rectangleOf: rightWall.size)
-            rightWall.physicsBody?.affectedByGravity = false
-            rightWall.physicsBody?.isDynamic = false
-            rightWall.physicsBody!.contactTestBitMask = rightWall.physicsBody!.collisionBitMask
-        }
+        
+        let locations = [
+            "amsterdam", "athens", "berlin", "london",
+            "newYork", "paris", "rome", "washington"
+        ]
         background = childNode(withName: "//background") as? SKSpriteNode
-        let locations = ["amsterdam", "athens", "berlin", "london", "newYork", "paris", "rome", "washington"]
         background?.texture = SKTexture(imageNamed: locations.randomElement()!)
         
         let dropperGroup = childNode(withName: "//droppers")
@@ -53,7 +49,7 @@ class World: SKScene, SKPhysicsContactDelegate {
         
         let width = (size.width + size.height) * 0.05
         car = SKSpriteNode(texture: SKTexture(imageNamed: "yellowMini"), color: .black, size: CGSize(width: width * 2.4, height: width))
-        if let car = car, let floor = floor {
+        if let car = car, let floor = environment[0] {
             car.position = CGPoint(
                 x: floor.anchorPoint.x,
                 y: floor.position.y + ((floor.size.height + width) / 2)
@@ -72,13 +68,20 @@ class World: SKScene, SKPhysicsContactDelegate {
         // a is 0, d is 2
         switch event.keyCode {
         case 123: // Left arrow
-            if let car = car {
-                car.position.x -= velocity
-            }
+            isLeftKeyDown = true
         case 124: // Right arrow
-            if let car = car {
-                car.position.x += velocity
-            }
+            isRightKeyDown = true
+        default: break
+        }
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        // a is 0, d is 2
+        switch event.keyCode {
+        case 123: // Left arrow
+            isLeftKeyDown = false
+        case 124: // Right arrow
+            isRightKeyDown = false
         case 53: // Escape
             exit(0)
         default: break
@@ -104,17 +107,33 @@ class World: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        // Driving
+        if !(isLeftKeyDown && isRightKeyDown) {
+            let rate: CGFloat = 0.05
+            let relativeVelocity = CGVector(
+                dx: 200 - (car!.physicsBody?.velocity.dx)!,
+                dy: 200 - (car!.physicsBody?.velocity.dy)!
+            )
+            if isLeftKeyDown || isRightKeyDown {
+                car!.physicsBody!.velocity = CGVector(
+                    dx: car!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isLeftKeyDown ? -1 : 1),
+                    dy: car!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
+                )
+            }
+        }
+        
+        // Note spawning
         let spawnChance = Float.random(in: 0...1)
         guard spawnChance < 0.025 else { return }
         let dropper = droppers.randomElement()!
         guard dropper.children == [] else { return }
-        let ball = SKSpriteNode(texture: nil, color: .red, size: CGSize(width: 200, height: 200))
-        ball.physicsBody = SKPhysicsBody(rectangleOf: ball.size)
-        ball.physicsBody?.restitution = 0.4
-        ball.position = dropper.convert(dropper.position, to: self)
-        ball.name = "note"
-        ball.zPosition = 5
-        dropper.addChild(ball)
+        let note = SKSpriteNode(texture: nil, color: .red, size: CGSize(width: 200, height: 200))
+        note.physicsBody = SKPhysicsBody(rectangleOf: note.size)
+        note.physicsBody?.restitution = 0.4
+        note.position = dropper.convert(dropper.position, to: self)
+        note.name = "note"
+        note.zPosition = 5
+        dropper.addChild(note)
     }
     
 }
