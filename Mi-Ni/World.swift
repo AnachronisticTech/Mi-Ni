@@ -21,14 +21,21 @@ class World: SKScene, SKPhysicsContactDelegate {
     private var background: SKSpriteNode?
     private var droppers = [SKSpriteNode]()
     private var environment = [SKSpriteNode?]()
+    private var yellowScore: SKLabelNode!
+    private var greenScore: SKLabelNode!
     
-    var yellowScore = 0
-    var greenScore = 0
+    var yellowScoreValue = 0 {
+        didSet { yellowScore.text = "\(yellowScoreValue)" }
+    }
+    var greenScoreValue = 0 {
+        didSet { greenScore.text = "\(greenScoreValue)" }
+    }
     
     override func didMove(to view: SKView) {
         
         scaleMode = .aspectFit
         physicsWorld.contactDelegate = self
+        physicsWorld.gravity.dy = -2
         
         environment = [
             childNode(withName: "//floor") as? SKSpriteNode,
@@ -54,6 +61,7 @@ class World: SKScene, SKPhysicsContactDelegate {
         let dropperGroup = childNode(withName: "//droppers")
         droppers = dropperGroup?.children as? [SKSpriteNode] ?? []
         
+        yellowScore = childNode(withName: "yellowIcon")?.childNode(withName: "//yellowScore") as! SKLabelNode as SKLabelNode
         yellowMini = childNode(withName: "//yellowMini") as? SKSpriteNode
         if let car = yellowMini {
             car.zPosition = 10
@@ -62,6 +70,7 @@ class World: SKScene, SKPhysicsContactDelegate {
             car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
         }
         
+        greenScore = childNode(withName: "greenIcon")?.childNode(withName: "//greenScore") as! SKLabelNode as SKLabelNode
         greenMini = childNode(withName: "//greenMini") as? SKSpriteNode
         if let car = greenMini {
             car.zPosition = 10
@@ -110,8 +119,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
-                yellowScore += 1
-                print("Yellow score: \(yellowScore)")
+                yellowScoreValue += 1
 
             /// Yellow catches niNote: -1
             case ("niNote", "yellowMini"):
@@ -119,8 +127,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "niNote"):
                 contact.bodyB.node?.removeFromParent()
-                if yellowScore > 0 { yellowScore -= 1 }
-                print("Yellow score: \(yellowScore)")
+                if yellowScoreValue > 0 { yellowScoreValue -= 1 }
 
             /// Green catches niNote: +1
             case ("niNote", "greenMini"):
@@ -128,8 +135,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "niNote"):
                 contact.bodyB.node?.removeFromParent()
-                greenScore += 1
-                print("Green score: \(greenScore)")
+                greenScoreValue += 1
 
             /// Green catches miNote: -1
             case ("miNote", "greenMini"):
@@ -137,34 +143,19 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
-                if greenScore > 0 { greenScore -= 1 }
-                print("Green score: \(greenScore)")
+                if greenScoreValue > 0 { greenScoreValue -= 1 }
             default: break
         }
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Driving
-        let rate: CGFloat = 0.05 // BUG: Moving left faster than moving right
+        let rate: CGFloat = 0.05
         if !(isLeftKeyDown && isRightKeyDown) && (isLeftKeyDown || isRightKeyDown) {
-            let relativeVelocity = CGVector(
-                dx: 200 - yellowMini!.physicsBody!.velocity.dx,
-                dy: 200 - yellowMini!.physicsBody!.velocity.dy
-            )
-            yellowMini!.physicsBody!.velocity = CGVector(
-                dx: yellowMini!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isLeftKeyDown ? -1 : 1),
-                dy: yellowMini!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
-            )
+            yellowMini!.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isLeftKeyDown ? -1 : 1), dy: 0)
         }
         if !(isAKeyDown && isDKeyDown) && (isAKeyDown || isDKeyDown) {
-            let relativeVelocity = CGVector(
-                dx: 200 - greenMini!.physicsBody!.velocity.dx,
-                dy: 200 - greenMini!.physicsBody!.velocity.dy
-            )
-            greenMini!.physicsBody!.velocity = CGVector(
-                dx: greenMini!.physicsBody!.velocity.dx + relativeVelocity.dx * rate * (isAKeyDown ? -1 : 1),
-                dy: greenMini!.physicsBody!.velocity.dy + relativeVelocity.dy * rate
-            )
+            greenMini!.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isAKeyDown ? -1 : 1), dy: 0)
         }
         
         // Note spawning
@@ -174,7 +165,7 @@ class World: SKScene, SKPhysicsContactDelegate {
         guard dropper.children == [] else { return }
         let noteType = ["mi", "ni"].randomElement()!
         let note = SKSpriteNode(
-            texture: SKTexture(imageNamed: noteType),
+            texture: SKTexture(imageNamed: "\(noteType)Alt"),
             color: .red,
             size: CGSize(width: 100, height: 100)
         )
