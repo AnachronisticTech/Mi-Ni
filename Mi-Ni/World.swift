@@ -47,6 +47,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 element.physicsBody = SKPhysicsBody(rectangleOf: element.size)
                 element.physicsBody!.affectedByGravity = false
                 element.physicsBody!.isDynamic = false
+                element.physicsBody!.categoryBitMask = UInt32(1)
                 element.physicsBody!.contactTestBitMask = element.physicsBody!.collisionBitMask
             }
         }
@@ -67,6 +68,8 @@ class World: SKScene, SKPhysicsContactDelegate {
             car.zPosition = 10
             car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
             car.physicsBody!.affectedByGravity = true
+            car.physicsBody!.categoryBitMask = UInt32(4)
+            car.physicsBody!.collisionBitMask = UInt32(1) | UInt32(2)
             car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
         }
         
@@ -76,9 +79,10 @@ class World: SKScene, SKPhysicsContactDelegate {
             car.zPosition = 10
             car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
             car.physicsBody!.affectedByGravity = true
+            car.physicsBody!.categoryBitMask = UInt32(8)
+            car.physicsBody!.collisionBitMask = UInt32(1) | UInt32(2)
             car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
         }
-        // cars should ignore each other's collisions
     }
     
     override func keyDown(with event: NSEvent) {
@@ -170,6 +174,8 @@ class World: SKScene, SKPhysicsContactDelegate {
             size: CGSize(width: 100, height: 100)
         )
         note.physicsBody = SKPhysicsBody(rectangleOf: note.size)
+        note.physicsBody!.categoryBitMask = UInt32(2)
+        note.physicsBody!.contactTestBitMask = UInt32(1) | UInt32(4) | UInt32(8)
         note.position = dropper.convert(dropper.position, to: self)
         note.name = "\(noteType)Note"
         note.zPosition = 5
