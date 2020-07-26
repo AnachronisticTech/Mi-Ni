@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9100AC4124CB29A300EE6CD0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100AC4024CB29A300EE6CD0 /* AppDelegate.swift */; };
-		9100AC4324CB29A300EE6CD0 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9100AC4224CB29A300EE6CD0 /* GameScene.sks */; };
-		9100AC4724CB29A300EE6CD0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100AC4624CB29A300EE6CD0 /* GameScene.swift */; };
 		9100AC4924CB29A300EE6CD0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100AC4824CB29A300EE6CD0 /* ViewController.swift */; };
 		9100AC4B24CB29A900EE6CD0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9100AC4A24CB29A900EE6CD0 /* Assets.xcassets */; };
 		9100AC4E24CB29A900EE6CD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9100AC4C24CB29A900EE6CD0 /* Main.storyboard */; };
@@ -22,8 +20,6 @@
 /* Begin PBXFileReference section */
 		9100AC3D24CB29A300EE6CD0 /* Mi-Ni.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mi-Ni.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9100AC4024CB29A300EE6CD0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9100AC4224CB29A300EE6CD0 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		9100AC4624CB29A300EE6CD0 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		9100AC4824CB29A300EE6CD0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9100AC4A24CB29A900EE6CD0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9100AC4D24CB29A900EE6CD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -66,8 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				9100AC4024CB29A300EE6CD0 /* AppDelegate.swift */,
-				9100AC4624CB29A300EE6CD0 /* GameScene.swift */,
-				9100AC4224CB29A300EE6CD0 /* GameScene.sks */,
 				9100AC5824CB2BFD00EE6CD0 /* World.sks */,
 				9100AC5624CB2BD700EE6CD0 /* World.swift */,
 				913B77D824CD7A0E003D1ABD /* Car.swift */,
@@ -140,7 +134,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				913B77D724CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf in Resources */,
-				9100AC4324CB29A300EE6CD0 /* GameScene.sks in Resources */,
 				9100AC4B24CB29A900EE6CD0 /* Assets.xcassets in Resources */,
 				9100AC5924CB2BFD00EE6CD0 /* World.sks in Resources */,
 				9100AC4E24CB29A900EE6CD0 /* Main.storyboard in Resources */,
@@ -155,7 +148,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9100AC4924CB29A300EE6CD0 /* ViewController.swift in Sources */,
-				9100AC4724CB29A300EE6CD0 /* GameScene.swift in Sources */,
 				913B77D924CD7A0E003D1ABD /* Car.swift in Sources */,
 				9100AC5724CB2BD700EE6CD0 /* World.swift in Sources */,
 				9100AC4124CB29A300EE6CD0 /* AppDelegate.swift in Sources */,
