@@ -82,13 +82,13 @@ class World: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         switch (contact.bodyA.node?.name, contact.bodyB.node?.name) {
-    //        case ("yellowMini", "leftWall"), ("leftWall", "yellowMini"):
-    //            print("car and wall collided")
-    //        case ("yellowMini", "rightWall"), ("rightWall", "yellowMini"):
-    //            print("yellowMini and wall collided")
             case ("floor", "miNote"), ("floor", "niNote"):
                 contact.bodyB.node?.removeFromParent()
             case ("miNote", "floor"), ("niNote", "floor"):
+                contact.bodyA.node?.removeFromParent()
+            case ("floor", "miNoteBonus"), ("floor", "niNoteBonus"):
+                contact.bodyB.node?.removeFromParent()
+            case ("miNoteBonus", "floor"), ("niNoteBonus", "floor"):
                 contact.bodyA.node?.removeFromParent()
 
             /// Yellow catches miNote: +1
@@ -107,6 +107,22 @@ class World: SKScene, SKPhysicsContactDelegate {
                 contact.bodyB.node?.removeFromParent()
                 yellowCar!.scoreValue -= 1
 
+            /// Yellow catches miNoteBonus: +3
+            case ("miNoteBonus", "yellowMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("yellowMini", "miNoteBonus"):
+                contact.bodyB.node?.removeFromParent()
+                yellowCar!.scoreValue += 3
+
+            /// Yellow catches niNoteBonus: -3
+            case ("niNoteBonus", "yellowMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("yellowMini", "niNoteBonus"):
+                contact.bodyB.node?.removeFromParent()
+                yellowCar!.scoreValue -= 3
+
             /// Green catches niNote: +1
             case ("niNote", "greenMini"):
                 contact.bodyA.node?.removeFromParent()
@@ -122,6 +138,23 @@ class World: SKScene, SKPhysicsContactDelegate {
             case ("greenMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
                 greenCar!.scoreValue -= 1
+
+            /// Green catches niNoteBonus: +3
+            case ("niNoteBonus", "greenMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("greenMini", "niNoteBonus"):
+                contact.bodyB.node?.removeFromParent()
+                greenCar!.scoreValue += 3
+
+            /// Green catches miNoteBonus: -3
+            case ("miNoteBonus", "greenMini"):
+                contact.bodyA.node?.removeFromParent()
+                fallthrough
+            case ("greenMini", "miNoteBonus"):
+                contact.bodyB.node?.removeFromParent()
+                greenCar!.scoreValue -= 3
+            
             default: break
         }
     }
@@ -138,17 +171,23 @@ class World: SKScene, SKPhysicsContactDelegate {
         guard dropper.children == [] else { return }
         let noteType = ["mi", "ni"].randomElement()!
         let note = SKSpriteNode(
-            texture: SKTexture(imageNamed: "\(noteType)Alt"),
-            color: .red,
-            size: CGSize(width: 100, height: 100)
+            texture: SKTexture(imageNamed: "\(noteType)\(spawnChance > 0.005 ? "Alt" : "Bonus")"),
+            size: CGSize(width: 120, height: 150)
         )
         note.physicsBody = SKPhysicsBody(rectangleOf: note.size)
         note.physicsBody!.categoryBitMask = UInt32(2)
         note.physicsBody!.contactTestBitMask = UInt32(1) | UInt32(4) | UInt32(8)
         note.position = dropper.convert(dropper.position, to: self)
-        note.name = "\(noteType)Note"
+        note.name = "\(noteType)Note\(spawnChance <= 0.005 ? "Bonus" : "")"
         note.zPosition = 5
         dropper.addChild(note)
+        if spawnChance <= 0.005 {
+            note.addChild(SKSpriteNode(texture: SKTexture(imageNamed: "noteBackground"), size: CGSize(width: 200, height: 200)))
+            note.children.first!.zPosition = -1
+            note.children.first!.run(
+                SKAction.repeatForever(SKAction.rotate(byAngle: 10, duration: 2))
+            )
+        }
     }
     
 }
