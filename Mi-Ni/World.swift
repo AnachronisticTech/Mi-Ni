@@ -15,6 +15,25 @@ class World: SKScene, SKPhysicsContactDelegate {
     var isDKeyDown = false
     var isLeftKeyDown = false
     var isRightKeyDown = false
+    var currentGreenVelocity: CGFloat = 0 {
+        didSet {
+            if oldValue <= 0 && currentGreenVelocity > 0.1 { // point right
+                greenMini!.run(SKAction.scaleX(to: 0.2, duration: 0.4))
+            } else if oldValue >= 0 && currentGreenVelocity < -0.1 { // point left
+                greenMini!.run(SKAction.scaleX(to: -0.2, duration: 0.4))
+            }
+
+        }
+    }
+    var currentYellowVelocity: CGFloat = 0 {
+        didSet {
+            if oldValue <= 0 && currentYellowVelocity > 0.1 { // point right
+                yellowMini!.run(SKAction.scaleX(to: 0.2, duration: 0.4))
+            } else if oldValue >= 0 && currentYellowVelocity < -0.1 { // point left
+                yellowMini!.run(SKAction.scaleX(to: -0.2, duration: 0.4))
+            }
+        }
+    }
     
     private var greenMini: SKSpriteNode?
     private var yellowMini: SKSpriteNode?
@@ -158,9 +177,11 @@ class World: SKScene, SKPhysicsContactDelegate {
         if !(isLeftKeyDown && isRightKeyDown) && (isLeftKeyDown || isRightKeyDown) {
             yellowMini!.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isLeftKeyDown ? -1 : 1), dy: 0)
         }
+        currentYellowVelocity = yellowMini!.physicsBody!.velocity.dx
         if !(isAKeyDown && isDKeyDown) && (isAKeyDown || isDKeyDown) {
             greenMini!.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isAKeyDown ? -1 : 1), dy: 0)
         }
+        currentGreenVelocity = greenMini!.physicsBody!.velocity.dx
         
         // Note spawning
         let spawnChance = Float.random(in: 0...1)

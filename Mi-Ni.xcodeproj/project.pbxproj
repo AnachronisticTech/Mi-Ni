@@ -15,6 +15,7 @@
 		9100AC4E24CB29A900EE6CD0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9100AC4C24CB29A900EE6CD0 /* Main.storyboard */; };
 		9100AC5724CB2BD700EE6CD0 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100AC5624CB2BD700EE6CD0 /* World.swift */; };
 		9100AC5924CB2BFD00EE6CD0 /* World.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9100AC5824CB2BFD00EE6CD0 /* World.sks */; };
+		913B77D724CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 913B77D624CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		9100AC5024CB29A900EE6CD0 /* Mi_Ni.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mi_Ni.entitlements; sourceTree = "<group>"; };
 		9100AC5624CB2BD700EE6CD0 /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		9100AC5824CB2BFD00EE6CD0 /* World.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = World.sks; sourceTree = "<group>"; };
+		913B77D624CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Catalina Avalon Sans W01 Rg.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				9100AC5624CB2BD700EE6CD0 /* World.swift */,
 				9100AC4824CB29A300EE6CD0 /* ViewController.swift */,
 				9100AC4A24CB29A900EE6CD0 /* Assets.xcassets */,
+				913B77D624CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf */,
 				9100AC4C24CB29A900EE6CD0 /* Main.storyboard */,
 				9100AC4F24CB29A900EE6CD0 /* Info.plist */,
 				9100AC5024CB29A900EE6CD0 /* Mi_Ni.entitlements */,
@@ -133,6 +136,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				913B77D724CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf in Resources */,
 				9100AC4324CB29A300EE6CD0 /* GameScene.sks in Resources */,
 				9100AC4B24CB29A900EE6CD0 /* Assets.xcassets in Resources */,
 				9100AC5924CB2BFD00EE6CD0 /* World.sks in Resources */,

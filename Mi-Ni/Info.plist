@@ -30,6 +30,10 @@
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticTermination</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Catalina Avalon Sans W01 Rg.ttf</string>
+	</array>
 	<key>NSSupportsSuddenTermination</key>
 	<true/>
 </dict>
