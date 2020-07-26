@@ -14,7 +14,7 @@ class World: SKScene, SKPhysicsContactDelegate {
     private var background: SKSpriteNode?
     private var droppers = [SKSpriteNode]()
     private var environment = [SKSpriteNode?]()
-    
+    var isSingleplayerMode = false
     var yellowCar: Car?
     var greenCar : Car?
     
@@ -25,9 +25,9 @@ class World: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity.dy = -2
         
         environment = [
-            childNode(withName: "//floor") as? SKSpriteNode,
-            childNode(withName: "//leftWall") as? SKSpriteNode,
-            childNode(withName: "//rightWall") as? SKSpriteNode
+            childNode(withName: "floor") as? SKSpriteNode,
+            childNode(withName: "leftWall") as? SKSpriteNode,
+            childNode(withName: "rightWall") as? SKSpriteNode
         ]
         for element in environment {
             if let element = element {
@@ -43,26 +43,31 @@ class World: SKScene, SKPhysicsContactDelegate {
             "amsterdam", "athens", "berlin", "london",
             "newYork", "paris", "rome", "washington"
         ]
-        background = childNode(withName: "//background") as? SKSpriteNode
+        background = childNode(withName: "background") as? SKSpriteNode
         background?.texture = SKTexture(imageNamed: locations.randomElement()!)
         
-        let dropperGroup = childNode(withName: "//droppers")
+        let dropperGroup = childNode(withName: "droppers")
         droppers = dropperGroup?.children as? [SKSpriteNode] ?? []
         
         yellowCar = Car(
-            childNode(withName: "//yellowMini") as! SKSpriteNode,
-            childNode(withName: "yellowIcon")?.childNode(withName: "//yellowScore") as! SKLabelNode as SKLabelNode, 4
+            childNode(withName: "yellowMini") as! SKSpriteNode,
+            childNode(withName: "yellowIcon")?.childNode(withName: "yellowScore") as! SKLabelNode as SKLabelNode, 4
         )
-        greenCar = Car(
-            childNode(withName: "//greenMini") as! SKSpriteNode,
-            childNode(withName: "greenIcon")?.childNode(withName: "//greenScore") as! SKLabelNode as SKLabelNode, 8
-        )
+        if isSingleplayerMode {
+            childNode(withName: "greenMini")?.removeFromParent()
+            childNode(withName: "greenIcon")?.removeFromParent()
+        } else {
+            greenCar = Car(
+                childNode(withName: "greenMini") as! SKSpriteNode,
+                childNode(withName: "greenIcon")?.childNode(withName: "greenScore") as! SKLabelNode as SKLabelNode, 8
+            )
+        }
     }
     
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
-            case 0: greenCar!.isLeftMovementKeyDown = true
-            case 2: greenCar!.isRightMovementKeyDown = true
+            case 0: greenCar?.isLeftMovementKeyDown = true
+            case 2: greenCar?.isRightMovementKeyDown = true
             case 123: yellowCar!.isLeftMovementKeyDown = true
             case 124: yellowCar!.isRightMovementKeyDown = true
             default: break
@@ -71,8 +76,8 @@ class World: SKScene, SKPhysicsContactDelegate {
     
     override func keyUp(with event: NSEvent) {
         switch event.keyCode {
-            case 0: greenCar!.isLeftMovementKeyDown = false
-            case 2: greenCar!.isRightMovementKeyDown = false
+            case 0: greenCar?.isLeftMovementKeyDown = false
+            case 2: greenCar?.isRightMovementKeyDown = false
             case 123: yellowCar!.isLeftMovementKeyDown = false
             case 124: yellowCar!.isRightMovementKeyDown = false
             case 53: exit(0)
@@ -162,7 +167,19 @@ class World: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         // Driving
         yellowCar!.update(currentTime)
-        greenCar!.update(currentTime)
+        if !isSingleplayerMode {
+            greenCar!.update(currentTime)
+        }
+        
+        // Game completion
+        let winScore = 25
+        if yellowCar!.scoreValue >= winScore || greenCar?.scoreValue ?? 0 >= winScore {
+            let transition = SKTransition.flipVertical(withDuration: 0.5)
+            let worldScene = CompletionPage(fileNamed: "CompletionPage.sks")!
+            worldScene.scaleMode = .aspectFit
+            worldScene.isYellowWin = yellowCar!.scoreValue >= winScore
+            scene?.view?.presentScene(worldScene, transition: transition)
+        }
         
         // Note spawning
         let spawnChance = Float.random(in: 0...1)

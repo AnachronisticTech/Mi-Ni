@@ -7,7 +7,6 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 class TitlePage: SKScene {
     
@@ -19,13 +18,19 @@ class TitlePage: SKScene {
         let location = event.location(in: self)
         if let node = nodes(at: location).first {
             switch node.name {
-            case "singleplayer": print("single")
-            case "multiplayer":
-                let transition = SKTransition.flipVertical(withDuration: 0.5)
-                let worldScene = World(fileNamed: "World.sks")!
-                worldScene.scaleMode = .aspectFit
-                scene?.view?.presentScene(worldScene, transition: transition)
-            default: break
+                case "singleplayer":
+                    let transition = SKTransition.flipVertical(withDuration: 0.5)
+                    let worldScene = World(fileNamed: "World.sks")!
+                    worldScene.scaleMode = .aspectFit
+                    worldScene.isSingleplayerMode = true
+                    scene?.view?.presentScene(worldScene, transition: transition)
+                case "multiplayer":
+                    let transition = SKTransition.flipVertical(withDuration: 0.5)
+                    let worldScene = World(fileNamed: "World.sks")!
+                    worldScene.scaleMode = .aspectFit
+                    worldScene.isSingleplayerMode = false
+                    scene?.view?.presentScene(worldScene, transition: transition)
+                default: break
             }
         }
     }

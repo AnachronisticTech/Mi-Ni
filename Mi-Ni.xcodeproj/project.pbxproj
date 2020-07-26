@@ -17,6 +17,8 @@
 		913B77D924CD7A0E003D1ABD /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913B77D824CD7A0E003D1ABD /* Car.swift */; };
 		913B77DB24CD8ADB003D1ABD /* TitlePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913B77DA24CD8ADB003D1ABD /* TitlePage.swift */; };
 		913B77DD24CD8AF5003D1ABD /* TitlePage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 913B77DC24CD8AF5003D1ABD /* TitlePage.sks */; };
+		913B77DF24CDA601003D1ABD /* CompletionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913B77DE24CDA601003D1ABD /* CompletionPage.swift */; };
+		913B77E124CDA60C003D1ABD /* CompletionPage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 913B77E024CDA60C003D1ABD /* CompletionPage.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		913B77D824CD7A0E003D1ABD /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		913B77DA24CD8ADB003D1ABD /* TitlePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitlePage.swift; sourceTree = "<group>"; };
 		913B77DC24CD8AF5003D1ABD /* TitlePage.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitlePage.sks; sourceTree = "<group>"; };
+		913B77DE24CDA601003D1ABD /* CompletionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionPage.swift; sourceTree = "<group>"; };
+		913B77E024CDA60C003D1ABD /* CompletionPage.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CompletionPage.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +74,8 @@
 				913B77DA24CD8ADB003D1ABD /* TitlePage.swift */,
 				9100AC5824CB2BFD00EE6CD0 /* World.sks */,
 				9100AC5624CB2BD700EE6CD0 /* World.swift */,
+				913B77E024CDA60C003D1ABD /* CompletionPage.sks */,
+				913B77DE24CDA601003D1ABD /* CompletionPage.swift */,
 				913B77D824CD7A0E003D1ABD /* Car.swift */,
 				9100AC4824CB29A300EE6CD0 /* ViewController.swift */,
 				9100AC4A24CB29A900EE6CD0 /* Assets.xcassets */,
@@ -144,6 +150,7 @@
 				9100AC4B24CB29A900EE6CD0 /* Assets.xcassets in Resources */,
 				9100AC5924CB2BFD00EE6CD0 /* World.sks in Resources */,
 				9100AC4E24CB29A900EE6CD0 /* Main.storyboard in Resources */,
+				913B77E124CDA60C003D1ABD /* CompletionPage.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +164,7 @@
 				9100AC4924CB29A300EE6CD0 /* ViewController.swift in Sources */,
 				913B77D924CD7A0E003D1ABD /* Car.swift in Sources */,
 				9100AC5724CB2BD700EE6CD0 /* World.swift in Sources */,
+				913B77DF24CDA601003D1ABD /* CompletionPage.swift in Sources */,
 				9100AC4124CB29A300EE6CD0 /* AppDelegate.swift in Sources */,
 				913B77DB24CD8ADB003D1ABD /* TitlePage.swift in Sources */,
 			);
