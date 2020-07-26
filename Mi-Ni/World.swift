@@ -102,6 +102,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("hi.mp3", waitForCompletion: false))
                 yellowCar!.scoreValue += 1
 
             /// Yellow catches niNote: -1
@@ -110,6 +111,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "niNote"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("glass.mp3", waitForCompletion: false))
                 yellowCar!.scoreValue -= 1
 
             /// Yellow catches miNoteBonus: +3
@@ -118,6 +120,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "miNoteBonus"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("powerUp1.mp3", waitForCompletion: false))
                 yellowCar!.scoreValue += 3
 
             /// Yellow catches niNoteBonus: -3
@@ -126,6 +129,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "niNoteBonus"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("glass.mp3", waitForCompletion: false))
                 yellowCar!.scoreValue -= 3
 
             /// Green catches niNote: +1
@@ -134,6 +138,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "niNote"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("low.mp3", waitForCompletion: false))
                 greenCar!.scoreValue += 1
 
             /// Green catches miNote: -1
@@ -142,6 +147,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("glass.mp3", waitForCompletion: false))
                 greenCar!.scoreValue -= 1
 
             /// Green catches niNoteBonus: +3
@@ -150,6 +156,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "niNoteBonus"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("powerUp2.mp3", waitForCompletion: false))
                 greenCar!.scoreValue += 3
 
             /// Green catches miNoteBonus: -3
@@ -158,6 +165,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "miNoteBonus"):
                 contact.bodyB.node?.removeFromParent()
+                run(SKAction.playSoundFileNamed("glass.mp3", waitForCompletion: false))
                 greenCar!.scoreValue -= 3
             
             default: break
@@ -178,6 +186,9 @@ class World: SKScene, SKPhysicsContactDelegate {
             let worldScene = CompletionPage(fileNamed: "CompletionPage.sks")!
             worldScene.scaleMode = .aspectFit
             worldScene.isYellowWin = yellowCar!.scoreValue >= winScore
+            worldScene.isSinglePlayer = isSingleplayerMode
+            worldScene.yellowScore = yellowCar!.scoreValue
+            worldScene.greenScore = greenCar?.scoreValue ?? 0
             scene?.view?.presentScene(worldScene, transition: transition)
         }
         

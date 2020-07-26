@@ -10,15 +10,29 @@ import SpriteKit
 
 class CompletionPage: SKScene {
     
+    var isSinglePlayer = false
     var isYellowWin = true
+    var yellowScore = 0
+    var greenScore = 0
     
     override func didMove(to view: SKView) {
         scaleMode = .aspectFit
         
         if isYellowWin {
-            childNode(withName: "//greenWin")?.removeFromParent()
+            childNode(withName: "greenWin")?.removeFromParent()
         } else {
-            childNode(withName: "//yellowWin")?.removeFromParent()
+            childNode(withName: "yellowWin")?.removeFromParent()
+        }
+        
+        (childNode(withName: "scoreContainer")?
+            .childNode(withName: "yellow")?
+            .childNode(withName: "yellowScore") as? SKLabelNode)?.text = "\(yellowScore)"
+        if isSinglePlayer {
+            childNode(withName: "scoreContainer")?.childNode(withName: "green")?.removeFromParent()
+        } else {
+            (childNode(withName: "scoreContainer")?
+                .childNode(withName: "green")?
+                .childNode(withName: "greenScore") as? SKLabelNode)?.text = "\(greenScore)"
         }
     }
     

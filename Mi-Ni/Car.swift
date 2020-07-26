@@ -46,7 +46,7 @@ class Car {
     func update(_ currentTime: TimeInterval) {
         let rate:CGFloat = 0.05
         if !(isLeftMovementKeyDown && isRightMovementKeyDown) && (isLeftMovementKeyDown || isRightMovementKeyDown) {
-            sprite.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isLeftMovementKeyDown ? -1 : 1), dy: 0)
+            sprite.physicsBody!.velocity = CGVector(dx: 6000 * rate * (isLeftMovementKeyDown ? -1 : 1), dy: 0)
         }
         currentVelocity = sprite.physicsBody!.velocity.dx
     }

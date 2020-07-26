@@ -19,6 +19,11 @@
 		913B77DD24CD8AF5003D1ABD /* TitlePage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 913B77DC24CD8AF5003D1ABD /* TitlePage.sks */; };
 		913B77DF24CDA601003D1ABD /* CompletionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913B77DE24CDA601003D1ABD /* CompletionPage.swift */; };
 		913B77E124CDA60C003D1ABD /* CompletionPage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 913B77E024CDA60C003D1ABD /* CompletionPage.sks */; };
+		91F34A3F24CDBA7C00E1BC66 /* low.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91F34A3D24CDBA7C00E1BC66 /* low.mp3 */; };
+		91F34A4024CDBA7C00E1BC66 /* hi.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91F34A3E24CDBA7C00E1BC66 /* hi.mp3 */; };
+		91F34A4224CDBC4700E1BC66 /* glass.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91F34A4124CDBC4700E1BC66 /* glass.mp3 */; };
+		91F34A4524CDC10C00E1BC66 /* powerUp1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91F34A4324CDC10C00E1BC66 /* powerUp1.mp3 */; };
+		91F34A4624CDC10C00E1BC66 /* powerUp2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91F34A4424CDC10C00E1BC66 /* powerUp2.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +42,11 @@
 		913B77DC24CD8AF5003D1ABD /* TitlePage.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitlePage.sks; sourceTree = "<group>"; };
 		913B77DE24CDA601003D1ABD /* CompletionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionPage.swift; sourceTree = "<group>"; };
 		913B77E024CDA60C003D1ABD /* CompletionPage.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CompletionPage.sks; sourceTree = "<group>"; };
+		91F34A3D24CDBA7C00E1BC66 /* low.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = low.mp3; sourceTree = "<group>"; };
+		91F34A3E24CDBA7C00E1BC66 /* hi.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hi.mp3; sourceTree = "<group>"; };
+		91F34A4124CDBC4700E1BC66 /* glass.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = glass.mp3; sourceTree = "<group>"; };
+		91F34A4324CDC10C00E1BC66 /* powerUp1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = powerUp1.mp3; sourceTree = "<group>"; };
+		91F34A4424CDC10C00E1BC66 /* powerUp2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = powerUp2.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +79,7 @@
 		9100AC3F24CB29A300EE6CD0 /* Mi-Ni */ = {
 			isa = PBXGroup;
 			children = (
+				91F34A3C24CDBA6C00E1BC66 /* Sounds */,
 				9100AC4024CB29A300EE6CD0 /* AppDelegate.swift */,
 				913B77DC24CD8AF5003D1ABD /* TitlePage.sks */,
 				913B77DA24CD8ADB003D1ABD /* TitlePage.swift */,
@@ -85,6 +96,18 @@
 				9100AC5024CB29A900EE6CD0 /* Mi_Ni.entitlements */,
 			);
 			path = "Mi-Ni";
+			sourceTree = "<group>";
+		};
+		91F34A3C24CDBA6C00E1BC66 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				91F34A3E24CDBA7C00E1BC66 /* hi.mp3 */,
+				91F34A3D24CDBA7C00E1BC66 /* low.mp3 */,
+				91F34A4124CDBC4700E1BC66 /* glass.mp3 */,
+				91F34A4324CDC10C00E1BC66 /* powerUp1.mp3 */,
+				91F34A4424CDC10C00E1BC66 /* powerUp2.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,10 +168,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91F34A3F24CDBA7C00E1BC66 /* low.mp3 in Resources */,
 				913B77DD24CD8AF5003D1ABD /* TitlePage.sks in Resources */,
 				913B77D724CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf in Resources */,
 				9100AC4B24CB29A900EE6CD0 /* Assets.xcassets in Resources */,
+				91F34A4624CDC10C00E1BC66 /* powerUp2.mp3 in Resources */,
 				9100AC5924CB2BFD00EE6CD0 /* World.sks in Resources */,
+				91F34A4224CDBC4700E1BC66 /* glass.mp3 in Resources */,
+				91F34A4024CDBA7C00E1BC66 /* hi.mp3 in Resources */,
+				91F34A4524CDC10C00E1BC66 /* powerUp1.mp3 in Resources */,
 				9100AC4E24CB29A900EE6CD0 /* Main.storyboard in Resources */,
 				913B77E124CDA60C003D1ABD /* CompletionPage.sks in Resources */,
 			);
