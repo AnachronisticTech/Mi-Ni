@@ -16,6 +16,7 @@
 		9100AC5724CB2BD700EE6CD0 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9100AC5624CB2BD700EE6CD0 /* World.swift */; };
 		9100AC5924CB2BFD00EE6CD0 /* World.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9100AC5824CB2BFD00EE6CD0 /* World.sks */; };
 		913B77D724CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 913B77D624CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf */; };
+		913B77D924CD7A0E003D1ABD /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913B77D824CD7A0E003D1ABD /* Car.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		9100AC5624CB2BD700EE6CD0 /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		9100AC5824CB2BFD00EE6CD0 /* World.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = World.sks; sourceTree = "<group>"; };
 		913B77D624CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Catalina Avalon Sans W01 Rg.ttf"; sourceTree = "<group>"; };
+		913B77D824CD7A0E003D1ABD /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				9100AC4224CB29A300EE6CD0 /* GameScene.sks */,
 				9100AC5824CB2BFD00EE6CD0 /* World.sks */,
 				9100AC5624CB2BD700EE6CD0 /* World.swift */,
+				913B77D824CD7A0E003D1ABD /* Car.swift */,
 				9100AC4824CB29A300EE6CD0 /* ViewController.swift */,
 				9100AC4A24CB29A900EE6CD0 /* Assets.xcassets */,
 				913B77D624CD77CC003D1ABD /* Catalina Avalon Sans W01 Rg.ttf */,
@@ -153,6 +156,7 @@
 			files = (
 				9100AC4924CB29A300EE6CD0 /* ViewController.swift in Sources */,
 				9100AC4724CB29A300EE6CD0 /* GameScene.swift in Sources */,
+				913B77D924CD7A0E003D1ABD /* Car.swift in Sources */,
 				9100AC5724CB2BD700EE6CD0 /* World.swift in Sources */,
 				9100AC4124CB29A300EE6CD0 /* AppDelegate.swift in Sources */,
 			);

@@ -11,44 +11,12 @@ import GameplayKit
 
 class World: SKScene, SKPhysicsContactDelegate {
     
-    var isAKeyDown = false
-    var isDKeyDown = false
-    var isLeftKeyDown = false
-    var isRightKeyDown = false
-    var currentGreenVelocity: CGFloat = 0 {
-        didSet {
-            if oldValue <= 0 && currentGreenVelocity > 0.1 { // point right
-                greenMini!.run(SKAction.scaleX(to: 0.2, duration: 0.4))
-            } else if oldValue >= 0 && currentGreenVelocity < -0.1 { // point left
-                greenMini!.run(SKAction.scaleX(to: -0.2, duration: 0.4))
-            }
-
-        }
-    }
-    var currentYellowVelocity: CGFloat = 0 {
-        didSet {
-            if oldValue <= 0 && currentYellowVelocity > 0.1 { // point right
-                yellowMini!.run(SKAction.scaleX(to: 0.2, duration: 0.4))
-            } else if oldValue >= 0 && currentYellowVelocity < -0.1 { // point left
-                yellowMini!.run(SKAction.scaleX(to: -0.2, duration: 0.4))
-            }
-        }
-    }
-    
-    private var greenMini: SKSpriteNode?
-    private var yellowMini: SKSpriteNode?
     private var background: SKSpriteNode?
     private var droppers = [SKSpriteNode]()
     private var environment = [SKSpriteNode?]()
-    private var yellowScore: SKLabelNode!
-    private var greenScore: SKLabelNode!
     
-    var yellowScoreValue = 0 {
-        didSet { yellowScore.text = "\(yellowScoreValue)" }
-    }
-    var greenScoreValue = 0 {
-        didSet { greenScore.text = "\(greenScoreValue)" }
-    }
+    var yellowCar: Car?
+    var greenCar : Car?
     
     override func didMove(to view: SKView) {
         
@@ -81,45 +49,32 @@ class World: SKScene, SKPhysicsContactDelegate {
         let dropperGroup = childNode(withName: "//droppers")
         droppers = dropperGroup?.children as? [SKSpriteNode] ?? []
         
-        yellowScore = childNode(withName: "yellowIcon")?.childNode(withName: "//yellowScore") as! SKLabelNode as SKLabelNode
-        yellowMini = childNode(withName: "//yellowMini") as? SKSpriteNode
-        if let car = yellowMini {
-            car.zPosition = 10
-            car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
-            car.physicsBody!.affectedByGravity = true
-            car.physicsBody!.categoryBitMask = UInt32(4)
-            car.physicsBody!.collisionBitMask = UInt32(1) | UInt32(2)
-            car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
-        }
-        
-        greenScore = childNode(withName: "greenIcon")?.childNode(withName: "//greenScore") as! SKLabelNode as SKLabelNode
-        greenMini = childNode(withName: "//greenMini") as? SKSpriteNode
-        if let car = greenMini {
-            car.zPosition = 10
-            car.physicsBody = SKPhysicsBody(rectangleOf: car.size)
-            car.physicsBody!.affectedByGravity = true
-            car.physicsBody!.categoryBitMask = UInt32(8)
-            car.physicsBody!.collisionBitMask = UInt32(1) | UInt32(2)
-            car.physicsBody!.contactTestBitMask = car.physicsBody!.collisionBitMask
-        }
+        yellowCar = Car(
+            childNode(withName: "//yellowMini") as! SKSpriteNode,
+            childNode(withName: "yellowIcon")?.childNode(withName: "//yellowScore") as! SKLabelNode as SKLabelNode, 4
+        )
+        greenCar = Car(
+            childNode(withName: "//greenMini") as! SKSpriteNode,
+            childNode(withName: "greenIcon")?.childNode(withName: "//greenScore") as! SKLabelNode as SKLabelNode, 8
+        )
     }
     
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
-            case 0: isAKeyDown = true
-            case 2: isDKeyDown = true
-            case 123: isLeftKeyDown = true
-            case 124: isRightKeyDown = true
+            case 0: greenCar!.isLeftMovementKeyDown = true
+            case 2: greenCar!.isRightMovementKeyDown = true
+            case 123: yellowCar!.isLeftMovementKeyDown = true
+            case 124: yellowCar!.isRightMovementKeyDown = true
             default: break
         }
     }
     
     override func keyUp(with event: NSEvent) {
         switch event.keyCode {
-            case 0: isAKeyDown = false
-            case 2: isDKeyDown = false
-            case 123: isLeftKeyDown = false
-            case 124: isRightKeyDown = false
+            case 0: greenCar!.isLeftMovementKeyDown = false
+            case 2: greenCar!.isRightMovementKeyDown = false
+            case 123: yellowCar!.isLeftMovementKeyDown = false
+            case 124: yellowCar!.isRightMovementKeyDown = false
             case 53: exit(0)
             default: break
         }
@@ -142,7 +97,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
-                yellowScoreValue += 1
+                yellowCar!.scoreValue += 1
 
             /// Yellow catches niNote: -1
             case ("niNote", "yellowMini"):
@@ -150,7 +105,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("yellowMini", "niNote"):
                 contact.bodyB.node?.removeFromParent()
-                if yellowScoreValue > 0 { yellowScoreValue -= 1 }
+                yellowCar!.scoreValue -= 1
 
             /// Green catches niNote: +1
             case ("niNote", "greenMini"):
@@ -158,7 +113,7 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "niNote"):
                 contact.bodyB.node?.removeFromParent()
-                greenScoreValue += 1
+                greenCar!.scoreValue += 1
 
             /// Green catches miNote: -1
             case ("miNote", "greenMini"):
@@ -166,22 +121,15 @@ class World: SKScene, SKPhysicsContactDelegate {
                 fallthrough
             case ("greenMini", "miNote"):
                 contact.bodyB.node?.removeFromParent()
-                if greenScoreValue > 0 { greenScoreValue -= 1 }
+                greenCar!.scoreValue -= 1
             default: break
         }
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Driving
-        let rate: CGFloat = 0.05
-        if !(isLeftKeyDown && isRightKeyDown) && (isLeftKeyDown || isRightKeyDown) {
-            yellowMini!.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isLeftKeyDown ? -1 : 1), dy: 0)
-        }
-        currentYellowVelocity = yellowMini!.physicsBody!.velocity.dx
-        if !(isAKeyDown && isDKeyDown) && (isAKeyDown || isDKeyDown) {
-            greenMini!.physicsBody!.velocity = CGVector(dx: 5000 * rate * (isAKeyDown ? -1 : 1), dy: 0)
-        }
-        currentGreenVelocity = greenMini!.physicsBody!.velocity.dx
+        yellowCar!.update(currentTime)
+        greenCar!.update(currentTime)
         
         // Note spawning
         let spawnChance = Float.random(in: 0...1)
